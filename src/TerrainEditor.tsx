@@ -45,6 +45,10 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
 
     renderCell(position: Position) {
         let startEndLabel = "";
+        let cellColor = "blue";
+        if (this.state.terrain.hasBoulder(position)) {
+            cellColor = "red";
+        }
         if (_.isEqual(this.state.terrain.start, position)) {
             startEndLabel = "S";
         }
@@ -57,7 +61,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     y={this.cellSize * position.y}
                     width={this.cellSize}
                     height={this.cellSize}
-                    style={{fill:'blue', stroke: 'black'}}
+                    style={{fill:cellColor, stroke: 'black'}}
                     onClick={() => this.handleCellClick(position)}
                 />
                 <text
