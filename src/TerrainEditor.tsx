@@ -2,6 +2,7 @@ import React from 'react';
 import Terrain from './Terrain';
 import Position from './Position';
 import Columbo from './Columbo';
+import _ from 'lodash';
 
 interface EditorProps {
     size: number
@@ -43,7 +44,15 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     renderCell(position: Position) {
-        return <rect
+        let startEndLabel = "";
+        if (_.isEqual(this.state.terrain.start, position)) {
+            startEndLabel = "S";
+        }
+        if (_.isEqual(this.state.terrain.end, position)) {
+            startEndLabel = "E";
+        }
+        return <g>
+                <rect
                     x={this.cellSize * position.x}
                     y={this.cellSize * position.y}
                     width={this.cellSize}
@@ -51,6 +60,12 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     style={{fill:'blue', stroke: 'black'}}
                     onClick={() => this.handleCellClick(position)}
                 />
+                <text
+                    x={this.cellSize * position.x}
+                    y={this.cellSize * position.y + this.cellSize}
+                    fill="black">{startEndLabel}
+                </text>
+            </g>
     }
 
     renderGrid() {
