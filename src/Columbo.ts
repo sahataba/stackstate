@@ -9,9 +9,8 @@ export default class Columbo {
 
         const terrain = new Terrain(4);
         
-        let boulders = new Set<string>();
-        boulders.add(new Position(2, 1).nodeId());
-        boulders.add(new Position(2, 2).nodeId());
+        terrain.addBoulder(new Position(2, 1));
+        terrain.addBoulder(new Position(2, 2));
 
         let terr = [
             ['o', '_', '_', 'e'],
@@ -22,13 +21,12 @@ export default class Columbo {
 
         let graph = createGraph();
 
-        debugger;
         for (var x = 0; x < terrain.size; x++) {
             for (var y = 0; y < terrain.size; y ++) {
                 const p = new Position(x, y);
                 const neighbors = terrain.neighbors(p);
                 neighbors.forEach(n => {
-                    if(!boulders.has(n.nodeId()) && !boulders.has(p.nodeId())) {
+                    if(!terrain.hasBoulder(n) && !terrain.hasBoulder(p)) {
                         graph.addLink(p.nodeId(), n.nodeId(), {weight: 1});
                     }
                 })
