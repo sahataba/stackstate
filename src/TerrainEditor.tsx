@@ -107,7 +107,6 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
            <button onClick={() => this.setSelector("boulder")}>boulder</button>
            <button onClick={() => this.solve()}>solve</button>
            {this.renderGrid()}
-           {JSON.stringify(this.state.terrain)}
        </div> 
     }
 }
