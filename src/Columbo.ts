@@ -5,19 +5,14 @@ import Position from './Position';
 import Terrain from './Terrain';
 
 export default class Columbo {
-    solve(): Node<any>[] {
-
-        const terrain = new Terrain(4);
+    solve(terrain: Terrain): Node<any>[] | string {
         
-        terrain.addBoulder(new Position(2, 1));
-        terrain.addBoulder(new Position(2, 2));
+        if (!terrain.start || !terrain.end) {
+            return "invalid";
+        }
 
-        let terr = [
-            ['o', '_', '_', 'e'],
-            ['_', 'g', 'b', '_'],
-            ['s', 'g', 'b', 'o'],
-            ['_', 'i', '_', '_'],
-        ];
+        const start = terrain.start
+        const end = terrain.end
 
         let graph = createGraph();
 
@@ -42,11 +37,7 @@ export default class Columbo {
         }
         });
 
-        const start = new Position(0, 2);
-        const end = new Position(3, 0);
         let solution = pathFinder.find(start.nodeId(), end.nodeId());
-
-        console.log(solution);
 
         return solution;
     }
