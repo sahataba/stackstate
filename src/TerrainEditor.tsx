@@ -11,13 +11,15 @@ interface EditorProps {
 interface EditorState {
     terrain: Terrain
     selector: string
+    solution: Position[]
 }
   
 export default class TerrainEditor extends React.Component<EditorProps, EditorState> {
 
     state: EditorState = {
         terrain: new Terrain(this.props.size),
-        selector: "start"
+        selector: "start",
+        solution: []
     }
 
     cellSize = 20;
@@ -27,8 +29,10 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     solve() {
-        const res = new Columbo().solve(this.state.terrain);
-        console.log(res) 
+        const solution = new Columbo().solve(this.state.terrain);
+        if (solution instanceof Array) {
+            this.setState({solution})
+        }
     }
 
     handleCellClick(position: Position) {
@@ -74,7 +78,17 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
 
     renderGrid() {
         const positions = this.state.terrain.allPositions();
-        return <svg>{positions.map(position => this.renderCell(position))}</svg>
+        const points = this.state.solution.map(p => {
+            return `${this.cellSize * p.x + this.cellSize / 2},${this.cellSize * p.y + this.cellSize / 2}`
+        }).join(" ");
+        return <svg>
+                {positions.map(position => this.renderCell(position))}
+                <polyline
+                    points={points}
+                    stroke="yellow"
+                    fill="none"
+                />
+               </svg>
     }
 
     render() {

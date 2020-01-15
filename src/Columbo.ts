@@ -1,11 +1,10 @@
 import createGraph from 'ngraph.graph';
-import {Node} from 'ngraph.graph';
 import path from 'ngraph.path';
 import Position from './Position';
 import Terrain from './Terrain';
 
 export default class Columbo {
-    solve(terrain: Terrain): Node<any>[] | string {
+    solve(terrain: Terrain): Position[] | string {
         
         if (!terrain.start || !terrain.end) {
             return "invalid";
@@ -19,6 +18,7 @@ export default class Columbo {
         for (var x = 0; x < terrain.size; x++) {
             for (var y = 0; y < terrain.size; y ++) {
                 const p = new Position(x, y);
+                graph.addNode(p.nodeId(), p);
                 const neighbors = terrain.neighbors(p);
                 neighbors.forEach(n => {
                     if(!terrain.hasBoulder(n) && !terrain.hasBoulder(p)) {
@@ -38,7 +38,7 @@ export default class Columbo {
         });
 
         let solution = pathFinder.find(start.nodeId(), end.nodeId());
-
-        return solution;
+        let res = solution.map(n => n.data);
+        return res;
     }
 }
