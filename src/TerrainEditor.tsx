@@ -90,7 +90,8 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         const points = this.state.solution.map(p => {
             return `${this.cellSize * p.x + this.cellSize / 2},${this.cellSize * p.y + this.cellSize / 2}`
         }).join(" ");
-        return <svg>
+        const sideLength = this.cellSize * this.props.size
+        return <svg height={sideLength} width={sideLength}>
                 {positions.map(position => this.renderCell(position))}
                 <polyline
                     points={points}
