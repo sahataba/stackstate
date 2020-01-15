@@ -1,5 +1,15 @@
 import Position from './Position';
 
+class Tile {
+    position: Position
+    tags: string[]
+
+    constructor(position: Position, tags: string[]) {
+        this.position = position
+        this.tags = tags
+    }
+}
+
 export default class Terrain {
 
     size: number;
@@ -8,6 +18,17 @@ export default class Terrain {
     constructor(size: number) {
         this.size = size;
         this.boulders = new Set<string>();
+    }
+
+    allPositions(): Position[] {
+        const all = new Array<Position>();
+        for (let y = 0; y < this.size; y++) {
+            for (let x = 0; x < this.size; x ++) {
+                const p = new Position(x, y);
+                all.push(p)
+            }
+        }
+        return all;
     }
 
     addBoulder(position: Position) {

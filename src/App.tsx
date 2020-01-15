@@ -1,16 +1,13 @@
 import React from 'react';
 import './App.css';
 import Columbo from './Columbo';
+import TerrainEditor from './TerrainEditor';
 
 const App: React.FC = () => {
   new Columbo().solve()
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
+      <TerrainEditor size={7}/>
     </div>
   );
 }
