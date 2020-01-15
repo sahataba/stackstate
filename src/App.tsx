@@ -4,7 +4,7 @@ import './App.css';
 import Columbo from './Columbo';
 
 const App: React.FC = () => {
-  new Columbo().greet()
+  new Columbo().solve()
   return (
     <div className="App">
       <header className="App-header">
