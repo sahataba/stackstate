@@ -37,13 +37,22 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
 
     handleCellClick(position: Position) {
         if (this.state.selector === "start") {
-            this.state.terrain.setStart(position);
+            this.setState((prevState) => {
+                prevState.terrain.setStart(position)
+                return {terrain: prevState.terrain};
+            });
         }
         if (this.state.selector === "end") {
-            this.state.terrain.setEnd(position);
+            this.setState((prevState) => {
+                prevState.terrain.setEnd(position)
+                return {terrain: prevState.terrain};
+            });
         }
         if (this.state.selector === "boulder") {
-            this.state.terrain.addBoulder(position);
+            this.setState((prevState) => {
+                prevState.terrain.addBoulder(position)
+                return {terrain: prevState.terrain};
+            });
         }
     }
 
