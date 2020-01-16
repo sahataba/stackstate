@@ -1,9 +1,11 @@
 import React from 'react';
+
 import Terrain from '../game/Terrain';
 import Position from '../game/Position';
 import Columbo from '../game/Columbo';
-import _ from 'lodash';
 import { CellType, Edge } from '../game/CellType';
+
+import _ from 'lodash';
 
 interface EditorProps {
     size: number
@@ -23,20 +25,20 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         solution: []
     }
 
-    cellSize = 20;
+    private cellSize = 20;
 
-    setSelector(selector: CellType | Edge) {
+    private setSelector(selector: CellType | Edge) {
         this.setState({selector});
     }
 
-    solve() {
+    private solve() {
         const solution = new Columbo().solve(this.state.terrain);
         if (solution instanceof Array) {
             this.setState({solution})
         }
     }
 
-    handleCellClick(position: Position) {
+    private handleCellClick(position: Position) {
         if (this.state.selector === "start" || this.state.selector === "end") {
             this.setState((prevState) => {
                 prevState.terrain.setEdge(position, this.state.selector as Edge)
@@ -50,7 +52,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         }
     }
 
-    renderCell(position: Position) {
+    private renderCell(position: Position) {
         let startEndLabel = "";
         let cellColor = "blue";
         let circleColor = null;
@@ -94,7 +96,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
             </g>
     }
 
-    renderGrid() {
+    private renderGrid() {
         const positions = this.state.terrain.allPositions();
         const points = this.state.solution.map(p => {
             return `${this.cellSize * p.x + this.cellSize / 2},${this.cellSize * p.y + this.cellSize / 2}`
@@ -110,15 +112,18 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                </svg>
     }
 
+    private allCellTypes: Array<CellType | Edge> = [
+        "start",
+        "end",
+        "boulder",
+        "gravel",
+        "enter",
+        "exit",
+        "normal"]
+
     render() {
        return <div>
-           <button onClick={() => this.setSelector("start")}>start</button>
-           <button onClick={() => this.setSelector("end")}>end</button>
-           <button onClick={() => this.setSelector("boulder")}>boulder</button>
-           <button onClick={() => this.setSelector("gravel")}>gravel</button>
-           <button onClick={() => this.setSelector("enter")}>enter</button>
-           <button onClick={() => this.setSelector("exit")}>exit</button>
-           <button onClick={() => this.setSelector("normal")}>normal</button>
+           {this.allCellTypes.map(cellType => <button onClick={() => this.setSelector(cellType)}>{cellType}</button>)}
            <button onClick={() => this.solve()}>solve</button>
            {this.renderGrid()}
        </div> 
