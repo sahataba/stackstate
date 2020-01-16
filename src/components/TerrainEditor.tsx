@@ -1,7 +1,7 @@
 import React from 'react';
-import Terrain from './Terrain';
-import Position from './Position';
-import Columbo from './Columbo';
+import Terrain from '../game/Terrain';
+import Position from '../game/Position';
+import Columbo from '../game/Columbo';
 import _ from 'lodash';
 
 interface EditorProps {
