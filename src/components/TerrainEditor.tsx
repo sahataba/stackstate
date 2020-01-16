@@ -55,12 +55,12 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     private renderCell(position: Position) {
         let startEndLabel = "";
         let cellColor = "blue";
-        let circleColor = null;
+        let wormholeColor = null;
         if (this.state.terrain.isCellType(position, "enter")) {
-            circleColor = "gold";
+            wormholeColor = "gold";
         }
         if (this.state.terrain.isCellType(position, "exit")) {
-            circleColor = "silver";
+            wormholeColor = "silver";
         }
         if (this.state.terrain.isCellType(position, "boulder")) {
             cellColor = "red";
@@ -82,11 +82,11 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     height={this.cellSize}
                     style={{fill:cellColor, stroke: 'black'}}
                 />
-                {circleColor ? <circle
+                {wormholeColor ? <circle
                     cx={this.cellSize * position.x + this.cellSize / 2}
                     cy={this.cellSize * position.y + this.cellSize / 2}
                     r={this.cellSize / 4}
-                    fill={circleColor}
+                    fill={wormholeColor}
                 /> : null}
                 <text
                     x={this.cellSize * position.x}
@@ -97,7 +97,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     private renderGrid() {
-        const positions = this.state.terrain.allPositions();
+        const positions = this.state.terrain.allPositions;
         const points = this.state.solution.map(p => {
             return `${this.cellSize * p.x + this.cellSize / 2},${this.cellSize * p.y + this.cellSize / 2}`
         }).join(" ");

@@ -1,16 +1,6 @@
 import Position from './Position';
 import { CellType, Edge } from './CellType';
 
-class Tile {
-    position: Position
-    tags: string[]
-
-    constructor(position: Position, tags: string[]) {
-        this.position = position
-        this.tags = tags
-    }
-}
-
 export default class Terrain {
 
     size: number;
@@ -18,6 +8,7 @@ export default class Terrain {
     exits: Set<string>;
     start: Position | null;
     end: Position | null;
+    allPositions: Position[];
 
     constructor(size: number) {
         this.size = size;
@@ -25,9 +16,10 @@ export default class Terrain {
         this.exits = new Set<string>();
         this.start = null;
         this.end = null;
+        this.allPositions = this.generateAllPositions(size);
     }
 
-    allPositions(): Position[] {
+    private generateAllPositions(size: number): Position[] {
         const all = new Array<Position>();
         for (let y = 0; y < this.size; y++) {
             for (let x = 0; x < this.size; x ++) {
@@ -63,26 +55,26 @@ export default class Terrain {
         }
     }
 
-    inTerrain(position: Position): boolean {
+    private inTerrain(position: Position): boolean {
         return position.x < this.size && position.y < this.size && position.x >= 0 && position.y >= 0;
     }
 
-    up(position: Position): Position | null {
+    private up(position: Position): Position | null {
         let p = new Position(position.x - 1, position.y);
         return this.inTerrain(p) ? p : null;
     }
 
-    down(position: Position): Position | null {
+    private down(position: Position): Position | null {
         let p = new Position(position.x + 1, position.y);
         return this.inTerrain(p) ? p : null;
     }
 
-    left(position: Position): Position | null {
+    private left(position: Position): Position | null {
         let p = new Position(position.x, position.y - 1);
         return this.inTerrain(p) ? p : null;
     }
 
-    right(position: Position): Position | null {
+    private right(position: Position): Position | null {
         let p = new Position(position.x, position.y + 1);
         return this.inTerrain(p) ? p : null;
     }
