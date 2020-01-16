@@ -14,12 +14,14 @@ export default class Terrain {
 
     size: number;
     boulders: Set<string>;
+    gravels: Set<string>;
     start: Position | null;
     end: Position | null;
 
     constructor(size: number) {
         this.size = size;
         this.boulders = new Set<string>();
+        this.gravels = new Set<string>();
         this.start = null;
         this.end = null;
     }
@@ -39,8 +41,16 @@ export default class Terrain {
         this.boulders = this.boulders.add(position.nodeId());
     }
 
-    hasBoulder(position: Position): boolean {
+    isBoulder(position: Position): boolean {
         return this.boulders.has(position.nodeId());
+    }
+
+    addGravel(position: Position) {
+        this.gravels = this.gravels.add(position.nodeId());
+    }
+
+    isGravel(position: Position): boolean {
+        return this.gravels.has(position.nodeId());
     }
 
     setStart(position: Position) {

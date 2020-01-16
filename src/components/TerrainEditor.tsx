@@ -54,13 +54,22 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                 return {terrain: prevState.terrain};
             });
         }
+        if (this.state.selector === "gravel") {
+            this.setState((prevState) => {
+                prevState.terrain.addGravel(position)
+                return {terrain: prevState.terrain};
+            });
+        }
     }
 
     renderCell(position: Position) {
         let startEndLabel = "";
         let cellColor = "blue";
-        if (this.state.terrain.hasBoulder(position)) {
+        if (this.state.terrain.isBoulder(position)) {
             cellColor = "red";
+        }
+        if (this.state.terrain.isGravel(position)) {
+            cellColor = "brown";
         }
         if (_.isEqual(this.state.terrain.start, position)) {
             startEndLabel = "S";
@@ -106,6 +115,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
            <button onClick={() => this.setSelector("start")}>start</button>
            <button onClick={() => this.setSelector("end")}>end</button>
            <button onClick={() => this.setSelector("boulder")}>boulder</button>
+           <button onClick={() => this.setSelector("gravel")}>gravel</button>
            <button onClick={() => this.solve()}>solve</button>
            {this.renderGrid()}
        </div> 
