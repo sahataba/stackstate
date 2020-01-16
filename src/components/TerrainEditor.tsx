@@ -3,7 +3,7 @@ import React from 'react';
 import Terrain from '../game/Terrain';
 import Position from '../game/Position';
 import Columbo from '../game/Columbo';
-import { CellType, Edge } from '../game/CellType';
+import { CellType, Edge, ALL_CELL_TYPES, ALL_EDGES } from '../game/CellType';
 
 import _ from 'lodash';
 
@@ -112,20 +112,16 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                </svg>
     }
 
-    private allCellTypes: Array<CellType | Edge> = [
-        "start",
-        "end",
-        "boulder",
-        "gravel",
-        "enter",
-        "exit",
-        "normal"]
+    private renderSelector(cellType: CellType | Edge) {
+        return <button onClick={() => this.setSelector(cellType)}>{cellType}</button>;
+    }
 
     render() {
        return <div>
-           {this.allCellTypes.map(cellType => <button onClick={() => this.setSelector(cellType)}>{cellType}</button>)}
-           <button onClick={() => this.solve()}>solve</button>
-           {this.renderGrid()}
+            {ALL_EDGES.map(e => this.renderSelector(e))}
+            {ALL_CELL_TYPES.map(c => this.renderSelector(c))}
+            <button onClick={() => this.solve()}>solve</button>
+            {this.renderGrid()}
        </div> 
     }
 }
