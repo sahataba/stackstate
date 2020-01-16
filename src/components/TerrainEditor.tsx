@@ -53,6 +53,13 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     renderCell(position: Position) {
         let startEndLabel = "";
         let cellColor = "blue";
+        let circleColor = null;
+        if (this.state.terrain.isCellType(position, "enter")) {
+            circleColor = "gold";
+        }
+        if (this.state.terrain.isCellType(position, "exit")) {
+            circleColor = "silver";
+        }
         if (this.state.terrain.isCellType(position, "boulder")) {
             cellColor = "red";
         }
@@ -65,15 +72,20 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         if (_.isEqual(this.state.terrain.end, position)) {
             startEndLabel = "E";
         }
-        return <g>
+        return <g onClick={() => this.handleCellClick(position)}>
                 <rect
                     x={this.cellSize * position.x}
                     y={this.cellSize * position.y}
                     width={this.cellSize}
                     height={this.cellSize}
                     style={{fill:cellColor, stroke: 'black'}}
-                    onClick={() => this.handleCellClick(position)}
                 />
+                {circleColor ? <circle
+                    cx={this.cellSize * position.x + this.cellSize / 2}
+                    cy={this.cellSize * position.y + this.cellSize / 2}
+                    r={this.cellSize / 4}
+                    fill={circleColor}
+                /> : null}
                 <text
                     x={this.cellSize * position.x}
                     y={this.cellSize * position.y + this.cellSize}
@@ -104,6 +116,8 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
            <button onClick={() => this.setSelector("end")}>end</button>
            <button onClick={() => this.setSelector("boulder")}>boulder</button>
            <button onClick={() => this.setSelector("gravel")}>gravel</button>
+           <button onClick={() => this.setSelector("enter")}>enter</button>
+           <button onClick={() => this.setSelector("exit")}>exit</button>
            <button onClick={() => this.setSelector("normal")}>normal</button>
            <button onClick={() => this.solve()}>solve</button>
            {this.renderGrid()}
