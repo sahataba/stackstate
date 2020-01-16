@@ -15,12 +15,14 @@ export default class Terrain {
 
     size: number;
     cells: Map<string, CellType>;
+    exits: Set<string>;
     start: Position | null;
     end: Position | null;
 
     constructor(size: number) {
         this.size = size;
         this.cells = new Map<string, CellType>();
+        this.exits = new Set<string>();
         this.start = null;
         this.end = null;
     }
@@ -42,6 +44,11 @@ export default class Terrain {
         } else {
             this.cells = this.cells.set(position.nodeId(), celltype);
         }  
+        if(celltype !== "exit") {
+            this.exits.delete(position.nodeId())
+        } else {
+            this.exits.add(position.nodeId())
+        }
     }
 
     isCellType(position: Position, celltype: CellType): boolean {

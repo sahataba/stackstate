@@ -32,6 +32,13 @@ export default class Columbo {
                         graph.addLink(p.nodeId(), n.nodeId(), {weight});
                     }
                 })
+                if(terrain.isCellType(p, "enter")) {
+                    terrain.exits.forEach(nodeId => {
+                        if(p.nodeId() !== nodeId) {
+                            graph.addLink(p.nodeId(), nodeId, {weight: 0})
+                        }
+                    })
+                }
             }
         }
 
