@@ -3,6 +3,7 @@ import Terrain from '../game/Terrain';
 import Position from '../game/Position';
 import Columbo from '../game/Columbo';
 import _ from 'lodash';
+import { CellType, Edge } from '../game/CellType';
 
 interface EditorProps {
     size: number
@@ -10,7 +11,7 @@ interface EditorProps {
 
 interface EditorState {
     terrain: Terrain
-    selector: string
+    selector: CellType | Edge
     solution: Position[]
 }
   
@@ -24,7 +25,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
 
     cellSize = 20;
 
-    setSelector(selector: string) {
+    setSelector(selector: CellType | Edge) {
         this.setState({selector});
     }
 
@@ -36,27 +37,14 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     handleCellClick(position: Position) {
-        if (this.state.selector === "start") {
+        if (this.state.selector === "start" || this.state.selector === "end") {
             this.setState((prevState) => {
-                prevState.terrain.setStart(position)
+                prevState.terrain.setEdge(position, this.state.selector as Edge)
                 return {terrain: prevState.terrain};
             });
-        }
-        if (this.state.selector === "end") {
+        } else if (this.state.selector as CellType) {
             this.setState((prevState) => {
-                prevState.terrain.setEnd(position)
-                return {terrain: prevState.terrain};
-            });
-        }
-        if (this.state.selector === "boulder") {
-            this.setState((prevState) => {
-                prevState.terrain.addBoulder(position)
-                return {terrain: prevState.terrain};
-            });
-        }
-        if (this.state.selector === "gravel") {
-            this.setState((prevState) => {
-                prevState.terrain.addGravel(position)
+                prevState.terrain.addCell(position, this.state.selector as CellType)
                 return {terrain: prevState.terrain};
             });
         }
@@ -65,10 +53,10 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     renderCell(position: Position) {
         let startEndLabel = "";
         let cellColor = "blue";
-        if (this.state.terrain.isBoulder(position)) {
+        if (this.state.terrain.isCellType(position, "boulder")) {
             cellColor = "red";
         }
-        if (this.state.terrain.isGravel(position)) {
+        if (this.state.terrain.isCellType(position, "gravel")) {
             cellColor = "brown";
         }
         if (_.isEqual(this.state.terrain.start, position)) {
@@ -116,6 +104,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
            <button onClick={() => this.setSelector("end")}>end</button>
            <button onClick={() => this.setSelector("boulder")}>boulder</button>
            <button onClick={() => this.setSelector("gravel")}>gravel</button>
+           <button onClick={() => this.setSelector("normal")}>normal</button>
            <button onClick={() => this.solve()}>solve</button>
            {this.renderGrid()}
        </div> 

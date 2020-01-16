@@ -21,12 +21,12 @@ export default class Columbo {
                 graph.addNode(p.nodeId(), p);
                 const neighbors = terrain.neighbors(p);
                 neighbors.forEach(n => {
-                    if(!terrain.isBoulder(n) && !terrain.isBoulder(p)) {
+                    if(!terrain.isCellType(n, "boulder") && !terrain.isCellType(p, "boulder")) {
                         let weight = 1;
-                        if (terrain.isGravel(p)) {
+                        if (terrain.isCellType(p, "gravel")) {
                             weight = weight + 0.5
                         }
-                        if (terrain.isGravel(n)) {
+                        if (terrain.isCellType(n, "gravel")) {
                             weight = weight + 0.5
                         }
                         graph.addLink(p.nodeId(), n.nodeId(), {weight});

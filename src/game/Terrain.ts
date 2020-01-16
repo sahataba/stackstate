@@ -1,4 +1,5 @@
 import Position from './Position';
+import { CellType, Edge } from './CellType';
 
 class Tile {
     position: Position
@@ -13,15 +14,13 @@ class Tile {
 export default class Terrain {
 
     size: number;
-    boulders: Set<string>;
-    gravels: Set<string>;
+    cells: Map<string, CellType>;
     start: Position | null;
     end: Position | null;
 
     constructor(size: number) {
         this.size = size;
-        this.boulders = new Set<string>();
-        this.gravels = new Set<string>();
+        this.cells = new Map<string, CellType>();
         this.start = null;
         this.end = null;
     }
@@ -37,28 +36,24 @@ export default class Terrain {
         return all;
     }
 
-    addBoulder(position: Position) {
-        this.boulders = this.boulders.add(position.nodeId());
+    addCell(position: Position, celltype: CellType) {
+        if (celltype === "normal") {
+            this.cells.delete(position.nodeId())
+        } else {
+            this.cells = this.cells.set(position.nodeId(), celltype);
+        }  
     }
 
-    isBoulder(position: Position): boolean {
-        return this.boulders.has(position.nodeId());
+    isCellType(position: Position, celltype: CellType): boolean {
+        return this.cells.get(position.nodeId()) === celltype;
     }
 
-    addGravel(position: Position) {
-        this.gravels = this.gravels.add(position.nodeId());
-    }
-
-    isGravel(position: Position): boolean {
-        return this.gravels.has(position.nodeId());
-    }
-
-    setStart(position: Position) {
-        this.start = position;
-    }
-
-    setEnd(position: Position) {
-        this.end = position;
+    setEdge(position: Position, edge: Edge) {
+        if (edge === "start") {
+            this.start = position;
+        } else {
+            this.end = position;
+        }
     }
 
     inTerrain(position: Position): boolean {
