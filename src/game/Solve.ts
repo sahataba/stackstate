@@ -3,11 +3,12 @@ import path from 'ngraph.path';
 import Position from './Position';
 import Terrain from './Terrain';
 
-export default function  solve(terrain: Terrain): Position[] | string {
+type SolveError = "No start position" | "No end position" | "Cannot find path"
+
+export default function  solve(terrain: Terrain): Position[] | SolveError {
         
-    if (!terrain.start || !terrain.end) {
-        return "invalid";
-    }
+    if (!terrain.start) {return "No start position";}
+    if (!terrain.end) {return "No end position";}
 
     const start = terrain.start
     const end = terrain.end
@@ -44,6 +45,9 @@ export default function  solve(terrain: Terrain): Position[] | string {
     let pathFinder = path.aStar(graph, {distance(fromNode, toNode, link) {return link.data.weight;}});
 
     let solution = pathFinder.find(start.nodeId, end.nodeId);
-    let res = solution.map(n => n.data);
-    return res;
+    if (solution.length === 0) {
+        return "Cannot find path";
+    } else {
+        return solution.map(n => n.data);
+    }
 }
