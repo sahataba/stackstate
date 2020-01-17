@@ -59,33 +59,13 @@ export default class Terrain {
         return position.x < this.size && position.y < this.size && position.x >= 0 && position.y >= 0;
     }
 
-    private up(position: Position): Position | null {
-        let p = new Position(position.x - 1, position.y);
-        return this.inTerrain(p) ? p : null;
-    }
-
-    private down(position: Position): Position | null {
-        let p = new Position(position.x + 1, position.y);
-        return this.inTerrain(p) ? p : null;
-    }
-
-    private left(position: Position): Position | null {
-        let p = new Position(position.x, position.y - 1);
-        return this.inTerrain(p) ? p : null;
-    }
-
-    private right(position: Position): Position | null {
-        let p = new Position(position.x, position.y + 1);
-        return this.inTerrain(p) ? p : null;
-    }
-
     neighbors(position: Position): Position[] {
         const neigh = [
-            this.up(position),
-            this.down(position),
-            this.left(position),
-            this.right(position),
+            new Position(position.x - 1, position.y),
+            new Position(position.x + 1, position.y),
+            new Position(position.x, position.y - 1),
+            new Position(position.x, position.y + 1),
         ]
-        return neigh.filter(p => p != null) as Position[]; //todo
+        return neigh.filter(p => this.inTerrain(p))
     }
 }
