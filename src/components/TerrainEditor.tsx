@@ -27,7 +27,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         error: null
     }
 
-    private cellSize = 20;
+    private cellSize = 30;
 
     private setSelector(selector: CellType | Edge) {
         this.setState({selector});
@@ -132,11 +132,23 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
 
     render() {
        return <div>
-            {ALL_EDGES.map(e => this.renderSelector(e))}
-            {ALL_CELL_TYPES.map(c => this.renderSelector(c))}
-            <button onClick={() => this.solve()}>solve</button>
-            {this.renderGrid()}
-            {this.state.error ? <div>{this.state.error}</div> : null}
-       </div> 
+           <div id="inner">
+                <div>
+                    <h1>Path finder</h1>
+                    <p>
+                        Choose a terrain cell type, and place it on grid by clicking desired position.
+                    </p>
+                    {ALL_EDGES.map(e => this.renderSelector(e))}
+                    {ALL_CELL_TYPES.map(c => this.renderSelector(c))}
+                </div>
+                <div>
+                    {this.renderGrid()}
+                </div>
+                <div>
+                    <button onClick={() => this.solve()}>solve</button>
+                    {this.state.error ? <div>{this.state.error}</div> : null}
+                </div>
+            </div>
+        </div>
     }
 }
