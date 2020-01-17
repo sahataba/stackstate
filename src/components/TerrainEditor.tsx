@@ -15,6 +15,7 @@ interface EditorState {
     terrain: Terrain
     selector: CellType | Edge
     solution: Position[]
+    error: string | null
 }
   
 export default class TerrainEditor extends React.Component<EditorProps, EditorState> {
@@ -22,7 +23,8 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     state: EditorState = {
         terrain: new Terrain(this.props.size),
         selector: "start",
-        solution: []
+        solution: [],
+        error: null
     }
 
     private cellSize = 20;
@@ -32,9 +34,11 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     private solve() {
-        const solution = solve(this.state.terrain);
-        if (solution instanceof Array) {
-            this.setState({solution})
+        const result = solve(this.state.terrain);
+        if (result instanceof Array) {
+            this.setState({solution: result})
+        } else {
+            this.setState({error: result, solution: []})
         }
     }
 
@@ -122,6 +126,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
             {ALL_CELL_TYPES.map(c => this.renderSelector(c))}
             <button onClick={() => this.solve()}>solve</button>
             {this.renderGrid()}
+            {this.state.error ? <div>{this.state.error}</div> : null}
        </div> 
     }
 }
