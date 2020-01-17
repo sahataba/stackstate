@@ -119,7 +119,15 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     private renderSelector(cellType: CellType | Edge) {
-        return <button onClick={() => this.setSelector(cellType)}>{cellType}</button>;
+        return <label>
+                <input
+                    type="radio"
+                    name="selector"
+                    value={cellType}
+                    checked={cellType === this.state.selector}
+                    onClick={() => this.setSelector(cellType)}/>
+                {cellType}
+            </label>
     }
 
     render() {
