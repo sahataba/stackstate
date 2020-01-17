@@ -19,6 +19,9 @@ interface EditorState {
     solution: Position[]
     error: SolveError | null
 }
+
+type CellColor = "blue" | "red" | "brown"
+type WormholeColor = "gold" | "silver"
   
 export default class TerrainEditor extends React.Component<EditorProps, EditorState> {
 
@@ -58,23 +61,34 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         }
     }
 
+    private getColor(cellType: CellType | Edge): CellColor | WormholeColor | "black" {
+        switch(cellType) {
+            case "enter": return "gold"
+            case "exit": return "silver"
+            case "boulder": return "red"
+            case "gravel": return "brown"
+            case "normal": return "blue"
+            default: return "black"
+        }
+    }
+
     private renderCell(position: Position) {
 
         let startEndLabel: "S" | "E" | null = null;
-        let cellColor: "blue" | "red" | "brown" = "blue";
-        let wormholeColor: "gold" | "silver" | null = null;
+        let cellColor: string = this.getColor("normal");
+        let wormholeColor: string | null = null;
 
         if (this.state.terrain.isCellType(position, "enter")) {
-            wormholeColor = "gold";
+            wormholeColor = this.getColor("enter");
         }
         if (this.state.terrain.isCellType(position, "exit")) {
-            wormholeColor = "silver";
+            wormholeColor = this.getColor("exit");
         }
         if (this.state.terrain.isCellType(position, "boulder")) {
-            cellColor = "red";
+            cellColor = this.getColor("boulder");
         }
         if (this.state.terrain.isCellType(position, "gravel")) {
-            cellColor = "brown";
+            cellColor = this.getColor("gravel");
         }
         if (_.isEqual(this.state.terrain.start, position)) {
             startEndLabel = "S";
@@ -128,7 +142,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     value={cellType}
                     checked={cellType === this.state.selector}
                     onClick={() => this.setSelector(cellType)}/>
-                {cellType}
+                <span style={{color:this.getColor(cellType)}}>{cellType}</span>
             </label>
     }
 
@@ -137,6 +151,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
            <div id="inner">
                 <div>
                     <h1>Path finder</h1>
+                    <h3>Legend</h3>
                     <p>
                         Choose a terrain cell type, and place it on grid by clicking desired position.
                     </p>
