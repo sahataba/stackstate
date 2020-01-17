@@ -2,7 +2,7 @@ import React from 'react';
 
 import Terrain from '../game/Terrain';
 import Position from '../game/Position';
-import solve from '../game/Solve';
+import { solve, SolveError } from '../game/Solve';
 import { CellType, Edge, ALL_CELL_TYPES, ALL_EDGES } from '../game/types';
 
 import _ from 'lodash';
@@ -15,7 +15,7 @@ interface EditorState {
     terrain: Terrain
     selector: CellType | Edge
     solution: Position[]
-    error: string | null
+    error: SolveError | null
 }
   
 export default class TerrainEditor extends React.Component<EditorProps, EditorState> {

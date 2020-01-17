@@ -3,9 +3,9 @@ import path from 'ngraph.path';
 import Position from './Position';
 import Terrain from './Terrain';
 
-type SolveError = "No start position" | "No end position" | "Cannot find path"
+export type SolveError = "No start position" | "No end position" | "Cannot find path"
 
-export default function  solve(terrain: Terrain): Position[] | SolveError {
+export function  solve(terrain: Terrain): Position[] | SolveError {
         
     if (!terrain.start) {return "No start position";}
     if (!terrain.end) {return "No end position";}
