@@ -47,17 +47,29 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         }
     }
 
+    private handleEdgeClick(position: Position, edge: Edge) {
+        this.setState((prevState) => {
+            prevState.terrain.setEdge(position, edge)
+            return {terrain: prevState.terrain};
+        });
+    }
+
+    private handleTerrainClick(position: Position, celltype: CellType) {
+        this.setState((prevState) => {
+            prevState.terrain.addCell(position, celltype)
+            return {terrain: prevState.terrain};
+        });
+    }
+
     private handleCellClick(position: Position) {
-        if (this.state.selector === "start" || this.state.selector === "end") {
-            this.setState((prevState) => {
-                prevState.terrain.setEdge(position, this.state.selector as Edge)
-                return {terrain: prevState.terrain};
-            });
-        } else if (this.state.selector as CellType) {
-            this.setState((prevState) => {
-                prevState.terrain.addCell(position, this.state.selector as CellType)
-                return {terrain: prevState.terrain};
-            });
+        switch(this.state.selector) {
+            case "start": return this.handleEdgeClick(position, "start")
+            case "end": return this.handleEdgeClick(position, "end")
+            case "enter": return this.handleTerrainClick(position, "enter")
+            case "exit": return this.handleTerrainClick(position, "exit")
+            case "boulder": return this.handleTerrainClick(position, "boulder")
+            case "gravel": return this.handleTerrainClick(position, "gravel")
+            case "normal": return this.handleTerrainClick(position, "normal")
         }
     }
 
