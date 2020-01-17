@@ -57,9 +57,11 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     private renderCell(position: Position) {
-        let startEndLabel = "";
-        let cellColor = "blue";
-        let wormholeColor = null;
+
+        let startEndLabel: "S" | "E" | null = null;
+        let cellColor: "blue" | "red" | "brown" = "blue";
+        let wormholeColor: "gold" | "silver" | null = null;
+
         if (this.state.terrain.isCellType(position, "enter")) {
             wormholeColor = "gold";
         }
@@ -92,11 +94,11 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     r={this.cellSize / 4}
                     fill={wormholeColor}
                 /> : null}
-                <text
+                {startEndLabel ? <text
                     x={this.cellSize * position.x}
                     y={this.cellSize * position.y + this.cellSize}
                     fill="black">{startEndLabel}
-                </text>
+                </text>: null}
             </g>
     }
 
