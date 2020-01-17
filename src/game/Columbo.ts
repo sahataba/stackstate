@@ -17,7 +17,7 @@ export default class Columbo {
 
         terrain.allPositions.forEach(p => {
 
-            graph.addNode(p.nodeId(), p);
+            graph.addNode(p.nodeId, p);
 
             const neighbors = terrain.neighbors(p);
             neighbors.forEach(n => {
@@ -29,14 +29,14 @@ export default class Columbo {
                     if (terrain.isCellType(n, "gravel")) {
                         weight = weight + 0.5
                     }
-                    graph.addLink(p.nodeId(), n.nodeId(), {weight});
+                    graph.addLink(p.nodeId, n.nodeId, {weight});
                 }
             })
 
             if(terrain.isCellType(p, "enter")) {
                 terrain.exits.forEach(nodeId => {
-                    if(p.nodeId() !== nodeId) {
-                        graph.addLink(p.nodeId(), nodeId, {weight: 0})
+                    if(p.nodeId !== nodeId) {
+                        graph.addLink(p.nodeId, nodeId, {weight: 0})
                     }
                 })
             }
@@ -51,7 +51,7 @@ export default class Columbo {
         }
         });
 
-        let solution = pathFinder.find(start.nodeId(), end.nodeId());
+        let solution = pathFinder.find(start.nodeId, end.nodeId);
         let res = solution.map(n => n.data);
         return res;
     }

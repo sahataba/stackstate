@@ -1,5 +1,5 @@
 import Position from './Position';
-import { CellType, Edge } from './CellType';
+import { CellType, Edge } from './types';
 
 export default class Terrain {
 
@@ -32,19 +32,19 @@ export default class Terrain {
 
     addCell(position: Position, celltype: CellType) {
         if (celltype === "normal") {
-            this.cells.delete(position.nodeId())
+            this.cells.delete(position.nodeId)
         } else {
-            this.cells = this.cells.set(position.nodeId(), celltype);
+            this.cells = this.cells.set(position.nodeId, celltype);
         }  
         if(celltype !== "exit") {
-            this.exits.delete(position.nodeId())
+            this.exits.delete(position.nodeId)
         } else {
-            this.exits.add(position.nodeId())
+            this.exits.add(position.nodeId)
         }
     }
 
     isCellType(position: Position, celltype: CellType): boolean {
-        return this.cells.get(position.nodeId()) === celltype;
+        return this.cells.get(position.nodeId) === celltype;
     }
 
     setEdge(position: Position, edge: Edge) {

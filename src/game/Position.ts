@@ -1,11 +1,10 @@
 export default class Position {
-    x: number;
-    y: number;
+    readonly x: number;
+    readonly y: number;
+    readonly nodeId: string;
     constructor(x: number, y:number) {
         this.x = x;
         this.y = y;
-    }
-    nodeId(): string {
-        return `${this.x}-${this.y}`;
+        this.nodeId = `${this.x}-${this.y}`;
     }
 }
