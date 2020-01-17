@@ -2,7 +2,7 @@ import React from 'react';
 
 import Terrain from '../game/Terrain';
 import Position from '../game/Position';
-import Columbo from '../game/Columbo';
+import solve from '../game/Solve';
 import { CellType, Edge, ALL_CELL_TYPES, ALL_EDGES } from '../game/types';
 
 import _ from 'lodash';
@@ -32,7 +32,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     }
 
     private solve() {
-        const solution = new Columbo().solve(this.state.terrain);
+        const solution = solve(this.state.terrain);
         if (solution instanceof Array) {
             this.setState({solution})
         }
