@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './TerrainEditor.css';
+
 import Terrain from '../game/Terrain';
 import Position from '../game/Position';
 import { solve, SolveError } from '../game/Solve';
