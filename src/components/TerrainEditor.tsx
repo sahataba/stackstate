@@ -36,7 +36,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     private solve() {
         const result = solve(this.state.terrain);
         if (result instanceof Array) {
-            this.setState({solution: result})
+            this.setState({solution: result, error: null})
         } else {
             this.setState({error: result, solution: []})
         }
