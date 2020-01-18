@@ -58,3 +58,38 @@ test('start and end can also be on boulder, gravel and wormholes(enter and exit)
   expect(terrain.start).toStrictEqual([1, 0]);
 
 });
+
+test('new terrain of size 2 generates 4 cells', () => {
+  let terrain = new Terrain(2)
+  expect(terrain.allPositions).toStrictEqual([
+    [0, 0], [1, 0],
+    [0, 1], [1, 1]]
+  );
+});
+
+test('neighbours of interior point returns 4 neighbour cell', () => {
+  let terrain = new Terrain(3)
+  const position: [number, number] = [1, 1]
+  
+  expect(terrain.neighbors(position).length).toBe(4);
+});
+
+test('neighbours of corner points returns 2 neighbour cell', () => {
+  let terrain = new Terrain(3)
+  
+  expect(terrain.neighbors([0, 0]).length).toBe(2);
+  expect(terrain.neighbors([0, 2]).length).toBe(2);
+  expect(terrain.neighbors([2, 0]).length).toBe(2);
+  expect(terrain.neighbors([2, 2]).length).toBe(2);
+
+});
+
+test('neighbours of side points returns 3 neighbour cell', () => {
+  let terrain = new Terrain(3)
+  
+  expect(terrain.neighbors([1, 0]).length).toBe(3);
+  expect(terrain.neighbors([1, 2]).length).toBe(3);
+  expect(terrain.neighbors([0, 1]).length).toBe(3);
+  expect(terrain.neighbors([2, 1]).length).toBe(3);
+
+});
