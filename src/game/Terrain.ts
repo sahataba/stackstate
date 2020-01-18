@@ -3,12 +3,12 @@ import { CellType, Edge } from './types';
 
 export default class Terrain {
 
-    size: number;
-    cells: Map<string, CellType>;
+    private readonly size: number;
+    private cells: Map<string, CellType>;
     exits: Set<string>;
     start: Position | null;
     end: Position | null;
-    allPositions: Position[];
+    readonly allPositions: Position[];
 
     constructor(size: number) {
         this.size = size;
@@ -60,11 +60,11 @@ export default class Terrain {
     }
 
     neighbors(position: Position): Position[] {
-        const neigh = [
-            [position[0] - 1, position[1]] as Position,
-            [position[0] + 1, position[1]] as Position,
-            [position[0], position[1] - 1] as Position,
-            [position[0], position[1] + 1] as Position,
+        const neigh: Position[] = [
+            [position[0] - 1, position[1]],
+            [position[0] + 1, position[1]],
+            [position[0], position[1] - 1],
+            [position[0], position[1] + 1],
         ]
         return neigh.filter(p => this.inTerrain(p))
     }
