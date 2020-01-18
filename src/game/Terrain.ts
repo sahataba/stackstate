@@ -1,4 +1,4 @@
-import Position from './Position';
+import { Position , nodeId} from './Position';
 import { CellType, Edge } from './types';
 
 export default class Terrain {
@@ -23,7 +23,7 @@ export default class Terrain {
         const all = new Array<Position>();
         for (let y = 0; y < this.size; y++) {
             for (let x = 0; x < this.size; x ++) {
-                const p = new Position(x, y);
+                const p: Position = [x, y];
                 all.push(p)
             }
         }
@@ -32,19 +32,19 @@ export default class Terrain {
 
     addCell(position: Position, celltype: CellType) {
         if (celltype === "normal") {
-            this.cells.delete(position.nodeId)
+            this.cells.delete(nodeId(position))
         } else {
-            this.cells = this.cells.set(position.nodeId, celltype);
+            this.cells = this.cells.set(nodeId(position), celltype);
         }  
         if(celltype !== "exit") {
-            this.exits.delete(position.nodeId)
+            this.exits.delete(nodeId(position))
         } else {
-            this.exits.add(position.nodeId)
+            this.exits.add(nodeId(position))
         }
     }
 
     isCellType(position: Position, celltype: CellType): boolean {
-        return this.cells.get(position.nodeId) === celltype;
+        return this.cells.get(nodeId(position)) === celltype;
     }
 
     setEdge(position: Position, edge: Edge) {
@@ -56,15 +56,15 @@ export default class Terrain {
     }
 
     private inTerrain(position: Position): boolean {
-        return position.x < this.size && position.y < this.size && position.x >= 0 && position.y >= 0;
+        return position[0] < this.size && position[1] < this.size && position[0] >= 0 && position[1] >= 0;
     }
 
     neighbors(position: Position): Position[] {
         const neigh = [
-            new Position(position.x - 1, position.y),
-            new Position(position.x + 1, position.y),
-            new Position(position.x, position.y - 1),
-            new Position(position.x, position.y + 1),
+            [position[0] - 1, position[1]] as Position,
+            [position[0] + 1, position[1]] as Position,
+            [position[0], position[1] - 1] as Position,
+            [position[0], position[1] + 1] as Position,
         ]
         return neigh.filter(p => this.inTerrain(p))
     }

@@ -1,10 +1,2 @@
-export default class Position {
-    readonly x: number;
-    readonly y: number;
-    readonly nodeId: string;
-    constructor(x: number, y:number) {
-        this.x = x;
-        this.y = y;
-        this.nodeId = `${this.x}-${this.y}`;
-    }
-}
+export type Position = [number, number];
+export function nodeId(p: Position): string { return  `${p[0]}-${p[1]}`}

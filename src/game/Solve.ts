@@ -1,6 +1,6 @@
 import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
-import Position from './Position';
+import { Position, nodeId } from './Position';
 import Terrain from './Terrain';
 
 export type SolveError = "No start position" | "No end position" | "Cannot find path"
@@ -17,7 +17,7 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
 
     terrain.allPositions.forEach(p => {
 
-        graph.addNode(p.nodeId, p);
+        graph.addNode(nodeId(p), p);
 
         const neighbors = terrain.neighbors(p);
         neighbors.forEach(n => {
@@ -29,14 +29,14 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
                 if (terrain.isCellType(n, "gravel")) {
                     weight = weight + 0.5
                 }
-                graph.addLink(p.nodeId, n.nodeId, {weight});
+                graph.addLink(nodeId(p), nodeId(n), {weight});
             }
         })
 
         if(terrain.isCellType(p, "enter")) {
-            terrain.exits.forEach(nodeId => {
-                if(p.nodeId !== nodeId) {
-                    graph.addLink(p.nodeId, nodeId, {weight: 0})
+            terrain.exits.forEach(id => {
+                if(nodeId(p) !== id) {
+                    graph.addLink(nodeId(p), id, {weight: 0})
                 }
             })
         }
@@ -44,7 +44,7 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
     
     let pathFinder = path.aStar(graph, {distance(fromNode, toNode, link) {return link.data.weight;}});
 
-    let solution = pathFinder.find(start.nodeId, end.nodeId);
+    let solution = pathFinder.find(nodeId(start), nodeId(end));
     if (solution.length === 0) {
         return "Cannot find path";
     } else {

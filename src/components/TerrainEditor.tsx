@@ -3,7 +3,7 @@ import React from 'react';
 import './TerrainEditor.css';
 
 import Terrain from '../game/Terrain';
-import Position from '../game/Position';
+import { Position } from '../game/Position';
 import { solve, SolveError } from '../game/Solve';
 import { CellType, Edge, ALL_CELL_TYPES, ALL_EDGES } from '../game/types';
 
@@ -110,21 +110,21 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         }
         return <g onClick={() => this.handleCellClick(position)}>
                 <rect
-                    x={this.cellSize * position.x}
-                    y={this.cellSize * position.y}
+                    x={this.cellSize * position[0]}
+                    y={this.cellSize * position[1]}
                     width={this.cellSize}
                     height={this.cellSize}
                     style={{fill:cellColor, stroke: 'black'}}
                 />
                 {wormholeColor ? <circle
-                    cx={this.cellSize * position.x + this.cellSize / 2}
-                    cy={this.cellSize * position.y + this.cellSize / 2}
+                    cx={this.cellSize * position[0] + this.cellSize / 2}
+                    cy={this.cellSize * position[1] + this.cellSize / 2}
                     r={this.cellSize / 4}
                     fill={wormholeColor}
                 /> : null}
                 {startEndLabel ? <text
-                    x={this.cellSize * position.x}
-                    y={this.cellSize * position.y + this.cellSize}
+                    x={this.cellSize * position[0]}
+                    y={this.cellSize * position[1] + this.cellSize}
                     fill="black">{startEndLabel}
                 </text>: null}
             </g>
@@ -133,7 +133,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
     private renderGrid() {
         const positions = this.state.terrain.allPositions;
         const points = this.state.solution.map(p => {
-            return `${this.cellSize * p.x + this.cellSize / 2},${this.cellSize * p.y + this.cellSize / 2}`
+            return `${this.cellSize * p[0] + this.cellSize / 2},${this.cellSize * p[1] + this.cellSize / 2}`
         }).join(" ");
         const sideLength = this.cellSize * this.props.size
         return <svg height={sideLength} width={sideLength}>
