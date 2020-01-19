@@ -1,4 +1,5 @@
 import Terrain from './Terrain';
+import {nodeId} from './Position';
 
 test('adding normal cells removes boulder, gravel and wormholes(enter and exit)', () => {
   let terrain = new Terrain(3)
@@ -52,6 +53,19 @@ test('start and end can also be on boulder, gravel and wormholes(enter and exit)
   expect(terrain.getCellType([1, 0])).toBe("exit")
   expect(terrain.start).toStrictEqual([1, 0]);
 
+});
+
+test('adding and removing exit cell, adds it and removes it from exits set', () => {
+  let terrain = new Terrain(3)
+
+  expect(terrain.getCellType([0, 0])).toBe("normal")
+  expect(terrain.exits.has(nodeId([0, 0]))).toBe(false)
+
+  terrain.addCell([0,0], "exit");
+  expect(terrain.exits.has(nodeId([0, 0]))).toBe(true)
+
+  terrain.addCell([0,0], "normal");
+  expect(terrain.exits.has(nodeId([0, 0]))).toBe(false)
 });
 
 test('new terrain of size 2 generates 4 cells', () => {
