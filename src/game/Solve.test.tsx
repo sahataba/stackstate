@@ -33,3 +33,19 @@ test('weight of traveling between gravel and normal is 1.5 = 0.5 * 1 + 0.5 * 2',
 test('weight of traveling between gravel and gravel is 2 = 0.5 * 2 + 0.5 * 2', () => {
   expect(calcWeight("gravel", "gravel")).toBe(2)  
 });
+
+test('weight of traveling between normal and wormhole enter is 0.5', () => {
+  expect(calcWeight("normal", "enter")).toBe(0.5)  
+});
+
+test('weight of traveling between gravel and wormhole enter is 1', () => {
+  expect(calcWeight("normal", "enter")).toBe(0.5)  
+});
+
+test('weight of traveling between normal and wormhole exit is 0.5', () => {
+  expect(calcWeight("normal", "enter")).toBe(0.5)  
+});
+
+test('weight of traveling between gravel and wormhole exit is 1', () => {
+  expect(calcWeight("normal", "enter")).toBe(0.5)  
+});

@@ -2,19 +2,22 @@ import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
 import { Position, nodeId } from './Position';
 import Terrain from './Terrain';
-import { CellType } from './types';
 
 export type SolveError = "No start position" | "No end position" | "Cannot find path"
 
-export function calcWeight(p: CellType, n: CellType) {
-    let weight = 1;
-    if (p === "gravel") {
-        weight = weight + 0.5
+function getWeigth(c: "normal" | "gravel" | "enter" | "exit"): number {
+    switch(c) {
+        case "normal": return 1
+        case "gravel": return 2
+        case "enter": return 0
+        case "exit": return 0
     }
-    if (n === "gravel") {
-        weight = weight + 0.5
-    }
-    return weight;
+}
+
+export function calcWeight(
+    p: "normal" | "gravel" | "enter" | "exit",
+    n: "normal" | "gravel" | "enter" | "exit") {
+    return getWeigth(p) * 0.5 + getWeigth(n) * 0.5;
 }
 
 export function  solve(terrain: Terrain): Position[] | SolveError {
@@ -27,22 +30,25 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
 
     let graph = createGraph();
 
-    terrain.allPositions.forEach(p => {
+    terrain.allPositions.forEach(current => {
 
-        graph.addNode(nodeId(p), p);
+        graph.addNode(nodeId(current), current);
 
-        const neighbors = terrain.neighbors(p);
-        neighbors.forEach(n => {
-            if(!(terrain.getCellType(n) === "boulder") && !(terrain.getCellType(p) === "boulder")) {
-                const weight = calcWeight(terrain.getCellType(p), terrain.getCellType(n));
-                graph.addLink(nodeId(p), nodeId(n), {weight});
+        const currentTyp = terrain.getCellType(current)
+
+        const neighbors = terrain.neighbors(current);
+        neighbors.forEach(next => {
+            const nextTyp = terrain.getCellType(next)
+            if(!(nextTyp === "boulder") && !( currentTyp === "boulder")) {
+                const weight = calcWeight(nextTyp, currentTyp);
+                graph.addLink(nodeId(current), nodeId(next), {weight});
             }
         })
 
-        if(terrain.getCellType(p) === "enter") {
+        if(currentTyp === "enter") {
             terrain.exits.forEach(id => {
-                if(nodeId(p) !== id) {
-                    graph.addLink(nodeId(p), id, {weight: 0})
+                if(nodeId(current) !== id) {
+                    graph.addLink(nodeId(current), id, {weight: 0})
                 }
             })
         }
