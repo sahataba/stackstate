@@ -7,7 +7,7 @@ export default class Terrain {
 
     private readonly size: number;
     private cells: Map<string, CellType>;
-    exits: Immutable.Set<Position>;
+    private exits: Immutable.Set<Position>;
     start: Position | null;
     end: Position | null;
     readonly allPositions: Position[];
@@ -19,6 +19,10 @@ export default class Terrain {
         this.start = null;
         this.end = null;
         this.allPositions = this.generateAllPositions(size);
+    }
+
+    public getExits(): Position[] {
+        return this.exits.toJS();
     }
 
     private generateAllPositions(size: number): Position[] {

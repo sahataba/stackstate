@@ -49,7 +49,7 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
         })
 
         if(currentTyp === "enter") {
-            terrain.exits.forEach(exit => {
+            terrain.getExits().forEach(exit => {
                 if(!_.isEqual(current, exit)) {
                     graph.addLink(nodeId(current), nodeId(exit), {weight: 0})
                 }
