@@ -2,10 +2,13 @@ import React from 'react';
 
 import './TerrainEditor.css';
 
+import Selector from './Selector';
+
 import Terrain from '../game/Terrain';
 import { Position } from '../game/Position';
 import { solve, SolveError } from '../game/Solve';
-import { CellType, Edge, ALL_CELL_TYPES, ALL_EDGES } from '../game/types';
+import { CellType, Edge } from '../game/types';
+import { getColor } from './Colors';
 
 import _ from 'lodash';
 
@@ -19,10 +22,7 @@ interface EditorState {
     solution: Position[]
     error: SolveError | null
 }
-
-type CellColor = "blue" | "red" | "brown"
-type WormholeColor = "gold" | "silver"
-  
+ 
 export default class TerrainEditor extends React.Component<EditorProps, EditorState> {
 
     state: EditorState = {
@@ -32,9 +32,14 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         error: null
     }
 
+    constructor(props: EditorProps) {
+        super(props);
+        this.selectorChanged = this.selectorChanged.bind(this);
+    }
+
     private cellSize = 30;
 
-    private setSelector(selector: CellType | Edge) {
+    private selectorChanged(selector: CellType | Edge) {
         this.setState({selector});
     }
 
@@ -73,34 +78,23 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         }
     }
 
-    private getColor(cellType: CellType | Edge): CellColor | WormholeColor | "black" {
-        switch(cellType) {
-            case "enter": return "gold"
-            case "exit": return "silver"
-            case "boulder": return "red"
-            case "gravel": return "brown"
-            case "normal": return "blue"
-            default: return "black"
-        }
-    }
-
     private renderCell(position: Position) {
 
         let startEndLabel: "S" | "E" | null = null;
-        let cellColor: string = this.getColor("normal");
+        let cellColor: string = getColor("normal");
         let wormholeColor: string | null = null;
 
         if (this.state.terrain.getCellType(position) === "enter") {
-            wormholeColor = this.getColor("enter");
+            wormholeColor = getColor("enter");
         }
         if (this.state.terrain.getCellType(position) === "exit") {
-            wormholeColor = this.getColor("exit");
+            wormholeColor = getColor("exit");
         }
         if (this.state.terrain.getCellType(position) === "boulder") {
-            cellColor = this.getColor("boulder");
+            cellColor = getColor("boulder");
         }
         if (this.state.terrain.getCellType(position) === "gravel") {
-            cellColor = this.getColor("gravel");
+            cellColor = getColor("gravel");
         }
         if (_.isEqual(this.state.terrain.start, position)) {
             startEndLabel = "S";
@@ -146,18 +140,6 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                </svg>
     }
 
-    private renderSelector(cellType: CellType | Edge) {
-        return <label>
-                <input
-                    type="radio"
-                    name="selector"
-                    value={cellType}
-                    checked={cellType === this.state.selector}
-                    onClick={() => this.setSelector(cellType)}/>
-                <span style={{color:this.getColor(cellType)}}>{cellType}</span>
-            </label>
-    }
-
     render() {
        return <div>
            <div id="inner">
@@ -167,8 +149,7 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
                     <p>
                         Choose a terrain cell type, and place it on grid by clicking desired position.
                     </p>
-                    {ALL_EDGES.map(e => this.renderSelector(e))}
-                    {ALL_CELL_TYPES.map(c => this.renderSelector(c))}
+                    <Selector initial="start" onChanged={this.selectorChanged}/>
                 </div>
                 <div>
                     {this.renderGrid()}
