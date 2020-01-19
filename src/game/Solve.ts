@@ -2,8 +2,20 @@ import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
 import { Position, nodeId } from './Position';
 import Terrain from './Terrain';
+import { CellType } from './types';
 
 export type SolveError = "No start position" | "No end position" | "Cannot find path"
+
+export function calcWeight(p: CellType, n: CellType) {
+    let weight = 1;
+    if (p === "gravel") {
+        weight = weight + 0.5
+    }
+    if (n === "gravel") {
+        weight = weight + 0.5
+    }
+    return weight;
+}
 
 export function  solve(terrain: Terrain): Position[] | SolveError {
         
@@ -21,19 +33,13 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
 
         const neighbors = terrain.neighbors(p);
         neighbors.forEach(n => {
-            if(!terrain.isCellType(n, "boulder") && !terrain.isCellType(p, "boulder")) {
-                let weight = 1;
-                if (terrain.isCellType(p, "gravel")) {
-                    weight = weight + 0.5
-                }
-                if (terrain.isCellType(n, "gravel")) {
-                    weight = weight + 0.5
-                }
+            if(!(terrain.getCellType(n) === "boulder") && !(terrain.getCellType(p) === "boulder")) {
+                const weight = calcWeight(terrain.getCellType(p), terrain.getCellType(n));
                 graph.addLink(nodeId(p), nodeId(n), {weight});
             }
         })
 
-        if(terrain.isCellType(p, "enter")) {
+        if(terrain.getCellType(p) === "enter") {
             terrain.exits.forEach(id => {
                 if(nodeId(p) !== id) {
                     graph.addLink(nodeId(p), id, {weight: 0})

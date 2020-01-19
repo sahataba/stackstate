@@ -43,13 +43,9 @@ export default class Terrain {
         }
     }
 
-    isCellType(position: Position, celltype: CellType): boolean {
+    getCellType(position: Position): CellType {
         const res =  this.cells.get(nodeId(position))
-        if (celltype === "normal") {
-            return res === undefined || res === null;
-        } else {
-            return res ? res === celltype : false;
-        }
+        return (res === undefined || res === null) ? "normal" : res;
     }
 
     setEdge(position: Position, edge: Edge) {

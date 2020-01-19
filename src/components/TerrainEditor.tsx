@@ -90,16 +90,16 @@ export default class TerrainEditor extends React.Component<EditorProps, EditorSt
         let cellColor: string = this.getColor("normal");
         let wormholeColor: string | null = null;
 
-        if (this.state.terrain.isCellType(position, "enter")) {
+        if (this.state.terrain.getCellType(position) === "enter") {
             wormholeColor = this.getColor("enter");
         }
-        if (this.state.terrain.isCellType(position, "exit")) {
+        if (this.state.terrain.getCellType(position) === "exit") {
             wormholeColor = this.getColor("exit");
         }
-        if (this.state.terrain.isCellType(position, "boulder")) {
+        if (this.state.terrain.getCellType(position) === "boulder") {
             cellColor = this.getColor("boulder");
         }
-        if (this.state.terrain.isCellType(position, "gravel")) {
+        if (this.state.terrain.getCellType(position) === "gravel") {
             cellColor = this.getColor("gravel");
         }
         if (_.isEqual(this.state.terrain.start, position)) {

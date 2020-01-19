@@ -1,4 +1,4 @@
-import { solve } from './Solve';
+import { solve, calcWeight } from './Solve';
 import Terrain from './Terrain';
 
 test('return No start position error message if start is not set', () => {
@@ -24,4 +24,12 @@ test('return Cannot find path error message if path cannot be found', () => {
   terrain.addCell([1, 2], "boulder")
   let res = solve(terrain)
   expect(res).toBe("Cannot find path");
+});
+
+test('weight of traveling between gravel and normal is 1.5 = 0.5 * 1 + 0.5 * 2', () => {
+  expect(calcWeight("normal", "gravel")).toBe(1.5)  
+});
+
+test('weight of traveling between gravel and gravel is 2 = 0.5 * 2 + 0.5 * 2', () => {
+  expect(calcWeight("gravel", "gravel")).toBe(2)  
 });
