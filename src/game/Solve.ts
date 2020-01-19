@@ -1,7 +1,10 @@
 import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
+
 import { Position, nodeId } from './Position';
 import Terrain from './Terrain';
+
+import _ from 'lodash';
 
 export type SolveError = "No start position" | "No end position" | "Cannot find path"
 
@@ -46,9 +49,9 @@ export function  solve(terrain: Terrain): Position[] | SolveError {
         })
 
         if(currentTyp === "enter") {
-            terrain.exits.forEach(id => {
-                if(nodeId(current) !== id) {
-                    graph.addLink(nodeId(current), id, {weight: 0})
+            terrain.exits.forEach(exit => {
+                if(!_.isEqual(current, exit)) {
+                    graph.addLink(nodeId(current), nodeId(exit), {weight: 0})
                 }
             })
         }

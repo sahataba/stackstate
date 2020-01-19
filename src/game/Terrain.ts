@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import { Position , nodeId} from './Position';
 import { CellType, Edge } from './types';
 
@@ -5,7 +7,7 @@ export default class Terrain {
 
     private readonly size: number;
     private cells: Map<string, CellType>;
-    exits: Set<string>;
+    exits: Immutable.Set<Position>;
     start: Position | null;
     end: Position | null;
     readonly allPositions: Position[];
@@ -13,7 +15,7 @@ export default class Terrain {
     constructor(size: number) {
         this.size = size;
         this.cells = new Map<string, CellType>();
-        this.exits = new Set<string>();
+        this.exits = Immutable.Set<Position>();
         this.start = null;
         this.end = null;
         this.allPositions = this.generateAllPositions(size);
@@ -37,9 +39,9 @@ export default class Terrain {
             this.cells = this.cells.set(nodeId(position), celltype);
         }  
         if(celltype !== "exit") {
-            this.exits.delete(nodeId(position))
+            this.exits = this.exits.delete(Immutable.fromJS(position))
         } else {
-            this.exits.add(nodeId(position))
+            this.exits = this.exits.add(Immutable.fromJS(position))
         }
     }
 
