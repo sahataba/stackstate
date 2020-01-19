@@ -1,12 +1,14 @@
 import createGraph from 'ngraph.graph';
 import path from 'ngraph.path';
 
-import { Position, nodeId } from './Position';
+import { Position } from './Position';
 import Terrain from './Terrain';
 
 import _ from 'lodash';
 
 export type SolveError = "No start position" | "No end position" | "Cannot find path"
+
+function nodeId(p: Position): string { return  `${p[0]}-${p[1]}`}
 
 function getWeigth(c: "normal" | "gravel" | "enter" | "exit"): number {
     switch(c) {
